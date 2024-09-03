@@ -18,7 +18,7 @@ def run_safety(path):
         return None
 
 if __name__ == "__main__":
-    TARGET_PATH = os.path.join(os.path.expanduser('~'), 'Desktop', 'myproject', 'sample_code')
+    TARGET_PATH = os.path.join(os.path.expanduser('~'), 'Desktop', 'myproject', 'sample_code')  #1234
     if os.path.exists(TARGET_PATH):
         safety_results = run_safety(TARGET_PATH)
         if safety_results:
