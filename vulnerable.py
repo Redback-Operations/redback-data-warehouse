@@ -18,4 +18,5 @@ def render_output(user_input):
 
 # Insecure default configuration (A6: Security Misconfiguration)
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')    
+    app.run(debug=True, host='0.0.0.0')    #1234
+ 
