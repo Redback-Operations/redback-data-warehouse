@@ -11,7 +11,7 @@ permissions:
   checks: write
   actions: write        # Addedsdasda
   security-events: write # Added
-  discussions: write    # Added ss
+  discussions: write    # Added ssdasda
   statuses: write       # Added
 
 jobs:
