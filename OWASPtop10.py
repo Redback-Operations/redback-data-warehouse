@@ -1,4 +1,5 @@
 # Test file with intentional security vulnerabilities
+# Test some other stuff
 
 # SQL Injection vulnerability
 def unsafe_sql_query(user_input):
