@@ -1,6 +1,6 @@
 # Test file with intentional security vulnerabilities
 
-# SQL Injection vulnerability
+# SQL Injection vulnerabilityfsdfsdfsdsdad
 def unsafe_sql_query(user_input):
     query = f"SELECT * FROM users WHERE username = '{user_input}'"
     return query
