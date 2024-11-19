@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
   issues: write
   checks: write
-  actions: write        # Added
+  actions: write        # Addedsdasda
   security-events: write # Added
   discussions: write    # Added ss
   statuses: write       # Added
