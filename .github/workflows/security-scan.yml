@@ -10,7 +10,7 @@ permissions:
   issues: write
   checks: write
   actions: write        # Addedsdasda
-  security-events: write # Added
+  security-events: write # Addedsadasd
   discussions: write    # Added ssdasda
   statuses: write       # Added
 
