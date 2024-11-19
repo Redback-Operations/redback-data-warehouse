@@ -334,6 +334,9 @@ jobs:
           retention-days: 90
 
       - name: Comment PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}        
+        
         uses: actions/github-script@v7
         if: always()
         with:
