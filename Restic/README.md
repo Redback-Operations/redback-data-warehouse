@@ -25,7 +25,17 @@
 cd Restic
 ```
 
-### 2. Restic Monitors and Backs Up the Following Volumes
+### 2. Create Required Folders
+
+Before proceeding, create the `backup` and `restore` folders inside the Restic directory. These folders will be used to store backup data and restored files, respectively.
+
+Run the following commands:
+
+```bash
+mkdir backup restore
+```
+
+### 3. Restic Monitors and Backs Up the Following Volumes
 
 Restic is configured to back up data from several external Docker volumes on Redback VM. Before running the backup system, make sure these volumes exist.
 
@@ -49,7 +59,7 @@ docker volume create dp-es-data
 docker volume create dp-logstash-data
 ```
 
-### 3. Configure Restic Password
+### 4. Configure Restic Password
 
 Create a `restic-password.txt` file in the project directory and add your Restic repository password:
 
@@ -57,7 +67,7 @@ Create a `restic-password.txt` file in the project directory and add your Restic
 your-secure-password
 ```
 
-### 4. Make Scripts Executable
+### 5. Make Scripts Executable
 
 Ensure the backup script is executable:
 
@@ -79,7 +89,7 @@ docker-compose up -d
 
 ### Verify the Logs
 
-Check the logs of the `restic container to ensure backups are running:
+Check the logs of the `restic` container to ensure backups are running:
 
 ```bash
 docker logs -f restic-backup
@@ -126,6 +136,7 @@ docker-compose down
 ## 📝 Notes
 
 - Ensure all required volumes are created before starting the container.
+- Create the `backup` and `restore` folders before running the system.
 - Modify the `backup.sh` script to customize the backup process.
 - Use `docker-compose logs` to troubleshoot any issues.
 
