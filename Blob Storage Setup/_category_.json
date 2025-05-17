@@ -1,0 +1,8 @@
+{
+  "label": "Blob Storage Setup",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Blob Storage setup using MinIO, Kafka, and Airflow for metadata publishing"
+  }
+}
