@@ -28,7 +28,7 @@ We built a pipeline that:
 
 ## Docker Compose Setup
 
-```
+```yaml
 version: '3.8'
 
 services:
@@ -125,7 +125,7 @@ volumes:
 
 ## Airflow DAG: test\_minio\_dag.py
 
-```
+```python
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
@@ -197,7 +197,7 @@ process_all = PythonOperator(
 
 ## Kafka Consumer Code (Testing)
 
-```
+```python
 from kafka import KafkaConsumer
 import json
 
