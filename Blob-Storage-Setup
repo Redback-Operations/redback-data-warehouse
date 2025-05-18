@@ -16,13 +16,13 @@ This documentation outlines the integration of **MinIO**, **Apache Kafka**, and 
 
 We built a pipeline that:
 
---> Stores blobs in **MinIO** object storage.
+Stores blobs in **MinIO** object storage.
 
---> Uses **Airflow** to fetch all blobs dynamically from the bucket.
+Uses **Airflow** to fetch all blobs dynamically from the bucket.
 
---> Publishes file metadata previews to **Kafka**.
+Publishes file metadata previews to **Kafka**.
 
---> **Displays messages in **Kafdrop UI**.
+**Displays messages in **Kafdrop UI**.
 
 ---
 
