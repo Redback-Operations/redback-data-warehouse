@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  restic:
+    image: restic/restic
+    container_name: restic-backup
+    #depends_on:
+      #minioserver:
+        #condition: service_started
+    environment:
+      RESTIC_REPOSITORY: "/backup/restic-repo"
+      RESTIC_PASSWORD_FILE: "/restic-password.txt/restic-password.txt"
+    volumes:
+      - data-lakehouse_minio-data:/data-lakehouse_minio-data
+      - data-lakehouse_minio-config:/data-lakehouse_minio-config
+      - fileuploadservice_dremio-data:/fileuploadservice_dremio-data
+      - dp-postgres-data:/dp-postgres-data
+      - dp-es-data:/dp-es-data
+      - dp-logstash-data:/dp-logstash-data
+      - ./backup:/backup
+      - ./restic-password.txt:/restic-password.txt
+      - ./restore:/restore
+      - ./scripts/backup.sh:/scripts/backup.sh
+    entrypoint: ["/bin/sh", "-c", "/scripts/backup.sh"]
+    networks:
+      - coredwinfrastructure_dw_network
+
+volumes:
+  data-lakehouse_minio-data:
+    external: true
+  data-lakehouse_minio-config:
+    external: true
+  fileuploadservice_dremio-data:
+    external: true
+  dp-postgres-data:
+    external: true
+  dp-es-data:
+    external: true
+  dp-logstash-data:
+    external: true
+
+networks:
+  coredwinfrastructure_dw_network:
+    external: true
