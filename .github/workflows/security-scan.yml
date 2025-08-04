@@ -51,10 +51,10 @@ jobs:
           echo "Running Bandit security scan..."
           
           bandit -r . \
-          --severity-level medium \        #Medium issues and higher.
-          --skip "${BANDIT_SKIP_IDS}" \    #Skip filtered IDs - Pulled above from GitHub Secret to avoid PR for every update.
+          --severity-level medium \
+          --skip "${BANDIT_SKIP_IDS}" \
           -f txt \
-          -o bandit-results.txt || true    #Continue on errors.
+          -o bandit-results.txt || true
           
           # Run Safety check on requirements
           if [ -f "requirements.txt" ]; then
