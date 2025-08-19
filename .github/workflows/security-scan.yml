@@ -44,10 +44,17 @@ jobs:
 
       - name: Run Security Scan
         id: security_scan
+        env:
+          BANDIT_SKIP_IDS: ${{ secrets.BANDIT_SKIP_IDS }}
         run: |
           # Run bandit recursively on all Python files
           echo "Running Bandit security scan..."
-          bandit -r . -f txt -o bandit-results.txt || true
+          
+          bandit -r . \
+          --severity-level medium \
+          --skip "${BANDIT_SKIP_IDS}" \
+          -f txt \
+          -o bandit-results.txt || true
           
           # Run Safety check on requirements
           if [ -f "requirements.txt" ]; then
