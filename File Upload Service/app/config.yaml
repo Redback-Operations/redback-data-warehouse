@@ -1,0 +1,28 @@
+tabular:
+  file_type: #csv or json
+  preprocessing:
+    cleaning:
+      drop_columns:
+        # - column1
+        # - column2
+      dropna: true
+      drop_duplicates: true
+      rename_columns:
+        # old_name1: new_name1
+        # old_name2: new_name2
+    transformation:
+      categorical_encoding:
+        columns:
+          # - column 1
+          # - column 2
+      fillna:
+        columns:
+          # column1: mean
+          # column2: median
+          # column3: mode
+          # column4: value
+      normalize:
+        columns: []
+    validation:
+      dtype_conversion:
+        # - date: datetime
