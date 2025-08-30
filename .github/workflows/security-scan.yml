@@ -54,6 +54,7 @@ jobs:
           --severity-level medium \
           --skip "${BANDIT_SKIP_IDS}" \
           -f txt \
+          -x .venv,venv,site-packages,build,dist,.tox,tests,migrations \
           -o bandit-results.txt || true
           
           # Run Safety check on requirements
