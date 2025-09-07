@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redback Operations</title>
+    <link rel="stylesheet" href="CSS.css">
+</head>
+<body>
+    <div>
+        <h2>Firewall Status</h2>
+        <p style="color: green; font-weight: bold;"> UFW is running.</p>
+        <h3>Open Firewall Ports:</h3>
+        <table style="background-color: white; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 6px;">To</th>
+                    <th style="border: 1px solid #ccc; padding: 6px;">Action</th>
+                    <th style="border: 1px solid #ccc; padding: 6px;">From</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <br>
+        </ul>
+
+<script>
+function fetchFirewallStatus() {
+    fetch('firewall.php')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('firewallOutput').innerHTML = data;
+        })
+        .catch(error => {
+            document.getElementById('firewallOutput').innerHTML = "Error fetching firewall status.";
+            console.error(error);
+        });
+}
+fetchFirewallStatus();
+setInterval(fetchFirewallStatus, 5000);
+</script>
+    </div>
+</body>
+</html>
