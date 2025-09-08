@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redback Operations</title>
+  <link rel="stylesheet" href="CSS.css" />
+</head>
+<body>
+  <div class="logo-header">
+    <img src="logo.svg" alt="Redback Operations Logo" class="logo">
+    <h1 class="Header">Redback Operations</h1>
+  </div>
+  <hr>
+  <details class="rb-menu card" open>
+    <summary class="rb-menu__summary">
+      <span class="chev">▼</span> Sections
+      <span class="rb-muted">(click to collapse)</span>
+    </summary>
+    <nav class="rb-items" id="rb-menu">
+  <a href="dashboard.html"     data-href="dashboard.html">Dashboard</a>
+  <a href="FileUpload.html"      data-href="FileUpload.html">File Upload</a>
+  <a href="CurrentProjects.html" data-href="CurrentProjects.html">Current Projects</a>
+  <a href="firewall.php"        data-href="firewall.php">Firewall Settings</a>
+</nav>
+</details>
+  <section class="card content-shell">
+    <div class="content-header">
+    </div>
+    <div class="content-body" id="rb-welcome">
+      Select a section above to load its contents here.
+    </div>
+    <iframe id="rb-frame" title="Redback Content"></iframe>
+  </section>
+  <script>
+    (function(){
+      const menu   = document.getElementById('rb-menu');
+      const frame  = document.getElementById('rb-frame');
+      const welcome= document.getElementById('rb-welcome');
+      const LSKEY  = 'rb-last-section';
+
+      function showWelcome(){
+        welcome.style.display = 'block';
+        frame.style.display   = 'none';
+      }
+      function showFrame(url){
+        frame.src = url;
+        frame.style.display   = 'block';
+        welcome.style.display = 'none';
+      }
+      function setActive(url){
+        [...menu.querySelectorAll('a')].forEach(a=>{
+          a.classList.toggle('active', a.dataset.href===url);
+        });
+      }
+      menu.addEventListener('click', (e)=>{
+        const a = e.target.closest('a[data-href]');
+        if(!a) return;
+        e.preventDefault();
+        const url = a.dataset.href;
+        setActive(url);
+        localStorage.setItem(LSKEY,url);
+        showFrame(url);
+      });
+      showWelcome();
+    })();
+  </script>
+  </body>
+</html>
