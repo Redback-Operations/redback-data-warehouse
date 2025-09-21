@@ -1,0 +1,20 @@
+Dataset Name,Source GitHub Paths,Target Location,File Type,Project,Preprocessing Required,Upload Timestamp,Deleted,Documentation Updated
+HandTremorDataset.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/wrist_mounted_parkinsons_disease_prediction/datasets/HandTremorDataset.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 5:45:22 PM",Yes,n/a
+parkinsons.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/parkinsons_disease/parkinsons.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 5:58:47 PM",Yes,n/a
+HeartAttackPredictionDataset.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/heart_attack_prediction/datasets/heart_attack_prediction_dataset.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:02:37 PM",Yes,yes
+HealthData.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/health_monitoring_dashboard/HealthData.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:08:40 PM",Yes,yes
+accgyr.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/fall_detection/data/acc_gyr.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:24:26 PM",Yes,n/a
+Diabetes012HealthIndicatorsBRFSS2015.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/codes/current_datasets/diabetes_012_health_indicators_BRFSS2015.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:32:57 PM",Yes,yes
+DiabetesPredictionDataset.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/data/previous/diabetes_prediction_dataset.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:37:15 PM",Yes,yes
+DiabetesDataUploadRandomized.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/data/previous/diabetes_data_upload_randomized.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:38:54 PM",Yes,yes
+AlzheimersDataset.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/alzheimers_prediction/Data_processing/Alzheimer's_dataset.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 6:55:42 PM",Yes,yes
+mostCommonDiseaseFeatureDataset20142019.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_analytics/most_common_disease_feature/dataset/2014-2019.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 7:00:04 PM",Yes,n/a
+DiabetesBinaryHealthIndicatorsBRFSS2015.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/codes/current_datasets/diabetes_binary_health_indicators_BRFSS2015.csv,dw-silver,CSV,project-2,No,"9/3/2025, 7:00:05 PM",Yes,Yes
+DiabetesBinary5050SplitHealthIndicatorsBRFSS2015.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/codes/current_datasets/diabetes_binary_5050split_health_indicators_BRFSS2015.csv,dw-silver,CSV,project-2,No,"9/3/2025, 7:00:05 PM",Yes,Yes
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+https://github.com/Redback-Operations/redback-senior-tech/pull/145,,,,,,,,
