@@ -11,10 +11,5 @@ AlzheimersDataset.csv,https://github.com/Redback-Operations/redback-senior-tech/
 mostCommonDiseaseFeatureDataset20142019.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_analytics/most_common_disease_feature/dataset/2014-2019.csv,dw-bronze,CSV,project-2,No,"9/3/2025, 7:00:04 PM",Yes,n/a
 DiabetesBinaryHealthIndicatorsBRFSS2015.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/codes/current_datasets/diabetes_binary_health_indicators_BRFSS2015.csv,dw-silver,CSV,project-2,No,"9/3/2025, 7:00:05 PM",Yes,Yes
 DiabetesBinary5050SplitHealthIndicatorsBRFSS2015.csv,https://github.com/Redback-Operations/redback-senior-tech/blob/main/data_science/diabetes_prediction/codes/current_datasets/diabetes_binary_5050split_health_indicators_BRFSS2015.csv,dw-silver,CSV,project-2,No,"9/3/2025, 7:00:05 PM",Yes,Yes
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-,,,,,,,,
-https://github.com/Redback-Operations/redback-senior-tech/pull/145,,,,,,,,
+
+
