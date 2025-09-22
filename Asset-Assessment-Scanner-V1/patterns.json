@@ -1,0 +1,102 @@
+{
+  "email": {
+    "pattern": "[a-zA-Z0-9+._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,63}",
+    "risk": "Medium",
+    "description": "Email address"
+  },
+  "aws_access_key": {
+    "pattern": "\\bAKIA[0-9A-Z]{16}\\b",
+    "risk": "High",
+    "description": "AWS Access Key"
+  },
+  "aws_secret_access_key": {
+    "pattern": "(?<![A-Za-z0-9/+=])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])",
+    "risk": "High",
+    "description": "AWS Secret Access Key (40-char base64-like)"
+  },
+  "gcp_service_account_key": {
+    "pattern": "-----BEGIN PRIVATE KEY-----[\\s\\S]+?-----END PRIVATE KEY-----",
+    "risk": "High",
+    "description": "GCP Service Account Private Key"
+  },
+  "azure_client_secret": {
+    "pattern": "(?i)(?:\\bclient[-_ ]?secret\\b|\\bazure[-_ ]?secret\\b|\\bapp[-_ ]?registration[-_ ]?secret\\b)\\s*[:=]\\s*['\"]?[A-Za-z0-9+/_\\-=]{20,128}['\"]?",
+    "risk": "High",
+    "description": "Azure client secret only when labelled"
+  },
+  "ssh_private_key": {
+    "pattern": "-----BEGIN (?:RSA|DSA|EC|OPENSSH) PRIVATE KEY-----[\\s\\S]+?-----END (?:RSA|DSA|EC|OPENSSH) PRIVATE KEY-----",
+    "risk": "High",
+    "description": "SSH Private Key"
+  },
+  "jwt_secret": {
+    "pattern": "\\b[A-Za-z0-9_-]{10,}\\.([A-Za-z0-9_-]{10,})\\.([A-Za-z0-9_-]{10,})\\b",
+    "risk": "High",
+    "description": "JWT token (header.payload.signature)"
+  },
+  "api_token": {
+    "pattern": "(?i)(?:\\bapi[-_ ]?token\\b|\\bapi[-_ ]?key\\b|\\baccess[-_ ]?token\\b|\\bsecret\\b)\\s*[:=]\\s*['\"]?[A-Za-z0-9._\\-]{20,}['\"]?|\\bAuthorization\\s*:\\s*Bearer\\s+[A-Za-z0-9._\\-]{20,}\\b",
+    "risk": "Medium",
+    "description": "Generic API token / key when explicitly labelled or in an Authorization header"
+  },
+  "password": {
+    "pattern": "(?i)\\bpassword\\s*[:=]\\s*['\"][^'\"\\r\\n]+['\"]",
+    "risk": "High",
+    "description": "Hard-coded password in labelled field"
+  },
+  "credit_card": {
+    "pattern": "\\b(?:4\\d{12}(?:\\d{3})?|5[1-5]\\d{14}|3[47]\\d{13}|6(?:011|5\\d{2})\\d{12})\\b",
+    "risk": "High",
+    "description": "Common card brands (Luhn check recommended in code)"
+  },
+  "ssn": {
+    "pattern": "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+    "risk": "High",
+    "description": "US Social Security Number"
+  },
+  "phone_number": {
+    "pattern": "\\b04\\d{2}\\s?\\d{3}\\s?\\d{3}\\b",
+    "risk": "Medium",
+    "description": "Australian mobile number (04## ### ###)"
+  },
+  "ip_address": {
+    "pattern": "\\b(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|\\d?\\d)\\b",
+    "risk": "Low",
+    "description": "IPv4 address (0–255 octets)"
+  },
+  "database_connection_string": {
+    "pattern": "(?i)\\b(?:jdbc:[^\\s'\";]+|postgresql://[^\\s'\";]+|mysql://[^\\s'\";]+|mongodb:(?:\\+srv)?:[^\\s'\";]+)\\b",
+    "risk": "High",
+    "description": "Database connection string"
+  },
+  "tfn": {
+    "pattern": "\\b\\d{3}\\s?\\d{3}\\s?\\d{3}\\b",
+    "risk": "High",
+    "description": "Australian Tax File Number (apply checksum in code)"
+  },
+  "medicare_number": {
+    "pattern": "\\b\\d{4}\\s?\\d{5}\\s?\\d{1}(?:\\s?\\d)?\\b",
+    "risk": "High",
+    "description": "Medicare card number (10 digits + optional 1-digit IRN)"
+  },
+  "drivers_licence_number": {
+    "pattern": "(?i)\\bdriver'?s?\\s*licen[cs]e(?:\\s*(?:no\\.?|number|#))?\\s*[:#-]?\\s*([A-Z0-9]{6,10})\\b",
+    "risk": "High",
+    "description": "AUS driver’s licence number only when explicitly labelled"
+  },
+  "address_au": {
+    "pattern": "(?is)\\b\\d{1,5}\\s+[A-Za-z][A-Za-z’'\\-\\. ]+\\s+(?:St|Street|Rd|Road|Ave|Avenue|Blvd|Boulevard|Dr|Drive|Ln|Lane|Ct|Court|Pl|Place|Pde|Parade|Ter|Terrace|Way)\\b(?:,\\s*[A-Za-z][A-Za-z ’'\\-]+)?(?:,\\s*(?:VIC|NSW|QLD|SA|WA|TAS|ACT|NT))?(?:\\s+\\d{4})?(?!.{0,200}(?:\\bfull[_\\s-]?name\\b|\\bname\\b|[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,63}|\\+?[1-9]\\d{8,14}|\\bTFN\\b|\\bMedicare\\b|licen[cs]e|driver))",
+    "risk": "Low",
+    "description": "Australian street address (standalone)"
+  },
+  "address_au_with_pii": {
+    "pattern": "(?is)\\b\\d{1,5}\\s+[A-Za-z][A-Za-z’'\\-\\. ]+\\s+(?:St|Street|Rd|Road|Ave|Avenue|Blvd|Boulevard|Dr|Drive|Ln|Lane|Ct|Court|Pl|Place|Pde|Parade|Ter|Terrace|Way)\\b(?:,\\s*[A-Za-z][A-Za-z ’'\\-]+)?(?:,\\s*(?:VIC|NSW|QLD|SA|WA|TAS|ACT|NT))?(?:\\s+\\d{4})?(?=.{0,200}(?:\\bfull[_\\s-]?name\\b|\\bname\\b|[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,63}|\\+?[1-9]\\d{8,14}|\\bTFN\\b|\\bMedicare\\b|licen[cs]e|driver))",
+    "risk": "High",
+    "description": "Australian street address near other identifiers (name/email/phone/ID)"
+  },
+  "name_full": {
+    "pattern": "(?i)\\b(?:full[_\\s-]?name|name|first[_\\s-]?name|last[_\\s-]?name)\\s*[:=]\\s*['\"]?[A-Z][a-z]+(?:[ -][A-Z][a-z]+){1,3}['\"]?",
+    "risk": "Low",
+    "description": "Full name in a labelled field"
+  }
+}

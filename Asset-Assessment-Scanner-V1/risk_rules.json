@@ -1,0 +1,180 @@
+{
+  "email": {
+    "level": "Low",
+    "tip": "Mask or obfuscate emails in logs/code unless strictly required; avoid storing in repos.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "GDPR Art. 5(1)(c) — Data minimisation",
+      "GDPR Art. 32 — Security of processing",
+      "GDPR Recital 30 — Online identifiers"
+    ]
+  },
+  "aws_access_key": {
+    "level": "High",
+    "tip": "Rotate immediately; revoke if exposed; move to a secrets manager; purge from history.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (NDB) scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "aws_secret_access_key": {
+    "level": "High",
+    "tip": "Revoke/rotate immediately; store only in a managed secrets vault; purge from history.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "gcp_service_account_key": {
+    "level": "High",
+    "tip": "Recreate the key; restrict IAM; store in Google Secret Manager; remove from repo history.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "azure_client_secret": {
+    "level": "High",
+    "tip": "Rotate the client secret; use Azure Key Vault; remove from source control history.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "ssh_private_key": {
+    "level": "High",
+    "tip": "Remove private keys from repos; rotate dependent keys; store via SSH agent or vault.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "jwt_secret": {
+    "level": "High",
+    "tip": "Rotate signing secrets/tokens; never commit to code; load from env or a secrets store.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "api_token": {
+    "level": "High",
+    "tip": "Regenerate and scope minimally; store in a secrets manager; remove from history.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "password": {
+    "level": "High",
+    "tip": "Remove hard-coded passwords; rotate immediately; use env vars or a vault.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "credit_card": {
+    "level": "High",
+    "tip": "Never store card numbers in code; use a tokenisation/payment provider; treat as an incident if exposed.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (NDB) scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing",
+      "GDPR Art. 33/34 — Personal data breach notification"
+    ]
+  },
+  "ssn": {
+    "level": "High",
+    "tip": "Remove or mask SSNs; handle only within strictly controlled, compliant systems.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "GDPR Art. 32 — Security of processing",
+      "California Civil Code § 1798.85 — SSN confidentiality (if applicable)"
+    ]
+  },
+  "phone_number": {
+    "level": "Low",
+    "tip": "Obfuscate where possible; avoid logging full numbers; limit retention.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "GDPR Art. 5(1)(c) — Data minimisation",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "ip_address": {
+    "level": "Low",
+    "tip": "Anonymise or truncate IPs where feasible; avoid storing long-term.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "GDPR Art. 4(1) — Personal data definition (when identifiable)",
+      "GDPR Recital 30 — Online identifiers",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "database_connection_string": {
+    "level": "High",
+    "tip": "Remove credentials from code; use env vars or a secrets manager; rotate compromised passwords.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11",
+      "Privacy Act 1988 (Cth) — NDB scheme, Part IIIC",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  },
+  "tfn": {
+    "level": "High",
+    "tip": "Never store TFNs in source or logs; restrict access; remove from repo history; secure at rest and in transit.",
+    "compliance": [
+      "Privacy (Tax File Number) Rule 2015 (Cth)",
+      "Privacy Act 1988 (Cth) — APP 9 (Government related identifiers)",
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (Part IIIC)"
+    ]
+  },
+  "medicare_number": {
+    "level": "High",
+    "tip": "Treat Medicare numbers as sensitive; minimise collection; avoid code/logs; secure storage and transmission.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 9 (Government related identifiers)",
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (Part IIIC)"
+    ]
+  },
+  "drivers_licence_number": {
+    "level": "High",
+    "tip": "Do not commit to repos; mask in logs; restrict access; rotate/replace if exposed per jurisdictional guidance.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 9 (Government related identifiers)",
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (Part IIIC)"
+    ]
+  },
+  "address_au_with_pii": {
+    "level": "High",
+    "tip": "Treat full addresses combined with other identifiers as sensitive; mask or remove; restrict access and retention.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "GDPR Art. 4(1) — Personal data",
+      "GDPR Art. 5(1)(c) — Data minimisation",
+      "GDPR Art. 32 — Security of processing",
+      "Privacy Act 1988 (Cth) — Notifiable Data Breaches (Part IIIC)"
+    ]
+  },
+  "name_full": {
+    "level": "Low",
+    "tip": "Mask or omit full names in code/logs unless strictly required; minimise collection and retention.",
+    "compliance": [
+      "Privacy Act 1988 (Cth) — APP 11 (Security of personal information)",
+      "GDPR Art. 4(1) — Personal data",
+      "GDPR Art. 5(1)(c) — Data minimisation",
+      "GDPR Art. 32 — Security of processing"
+    ]
+  }
+}
