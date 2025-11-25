@@ -142,7 +142,6 @@ services:
           POSTGRES_USER: ${POSTGRES_USER}
           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
           POSTGRES_DB: zabbix
-      depends_on:
     
   zabbix-web:
       container_name: zabbix-web
