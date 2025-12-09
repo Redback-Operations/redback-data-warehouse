@@ -33,14 +33,13 @@ jobs:
 
       - name: Run Trivy in table mode (repo-wide deps)
         run: |
-          echo "===== Trivy dependency vulnerabilities for repo (HIGH, CRITICAL) ====="
+          echo "===== Trivy dependency vulnerabilities for repo (ALL Severities) ====="
           trivy fs \
             --scanners vuln \
-            --severity HIGH,CRITICAL \
             --ignore-unfixed \
-            --exit-code 0 \
             --format table \
-            .
+            --no-progress \
+            . || true
             
   reviewdog-pr-check:
     name: Trivy PR Check
