@@ -31,6 +31,17 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
 
+      - name: Run Trivy in table mode (repo-wide deps)
+        run: |
+          echo "===== Trivy dependency vulnerabilities for repo (HIGH, CRITICAL) ====="
+          trivy fs \
+            --scanners vuln \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 0 \
+            --format table \
+            .
+            
   reviewdog-pr-check:
     name: Trivy PR Check
     runs-on: ubuntu-latest
@@ -57,7 +68,7 @@ jobs:
             mkdir trivy-results
             while read -r file; do
                 echo "Scanning $file..."
-                trivy fs --quiet --severity HIGH,CRITICAL --format json --output trivy-results/$(basename $file).json "$file" || true
+                trivy fs --quiet --severity HIGH,CRITICAL --format json --output trivy-results/$(basename "$file").json "$file" || true
             done < changed-files.txt
 
       - name: Run Reviewdog
