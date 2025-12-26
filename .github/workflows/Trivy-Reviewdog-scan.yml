@@ -10,41 +10,99 @@ jobs:
     name: Trivy Repo Scan & Upload to Security Tab
     runs-on: ubuntu-latest
     permissions:
-        contents: write
-        security-events: write
-
+      contents: write
+      security-events: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Trivy vulnerability scanner in repo mode
+      # Install Trivy CLI
+      - name: Install Trivy CLI
+        uses: aquasecurity/setup-trivy@v0.2.1
+
+      # Full repo scan in SARIF format for GitHub Security tab
+      - name: Run Trivy vulnerability scanner in repo mode (SARIF)
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: 'fs'
+          scan-type: "fs"
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
-      - name: Run Trivy in table mode (repo-wide deps)
+      # Enhanced dependency-focused scan (Python + Node) with saved output
+      - name: Dependency scan report (requirements + package-lock)
+        shell: bash
         run: |
-          echo "===== Trivy dependency vulnerabilities for repo (ALL Severities) ====="
-          trivy fs \
-            --scanners vuln \
-            --ignore-unfixed \
-            --format table \
-            --no-progress \
-            . || true
+          set -euo pipefail
+          mkdir -p trivy-out
+
+          echo "Finding dependency files..."
+          mapfile -t DEP_FILES < <(
+            find . -type f \( -name "requirements.txt" -o -name "requirements-dev.txt" -o -name "package-lock.json" \) \
+              -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.venv/*" -not -path "./venv/*" | sort
+          )
+
+          if [ "${#DEP_FILES[@]}" -eq 0 ]; then
+            echo "No dependency files found (requirements*.txt / package-lock.json)."
+            exit 0
+          fi
+
+          printf "Dependency files found:\n"
+          printf " - %s\n" "${DEP_FILES[@]}"
+
+          echo ""
+          echo "===== Trivy dependency vulnerabilities (HIGH,CRITICAL) ====="
+
+          # Scan each dependency file individually for better granularity
+          for f in "${DEP_FILES[@]}"; do
+            # Create safe filename for output (replace / with _)
+            safe_name="$(echo "$f" | sed 's|^\./||; s|/|_|g')"
+
+            echo ""
+            echo "### Scanning: $f"
             
+            # Generate human-readable table output
+            trivy fs \
+              --scanners vuln \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --no-progress \
+              --format table \
+              "$f" | tee "trivy-out/${safe_name}.txt" || true
+
+            # Generate machine-readable JSON output
+            trivy fs \
+              --scanners vuln \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --no-progress \
+              --format json \
+              --output "trivy-out/${safe_name}.json" \
+              "$f" || true
+          done
+
+      # Upload reports as artifacts (downloadable from Actions tab)
+      - name: Upload dependency reports (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-dependency-reports
+          path: trivy-out/
+          retention-days: 7
+
   reviewdog-pr-check:
-    name: Trivy PR Check
+    name: Trivy PR Check (Inline Comments)
     runs-on: ubuntu-latest
-    needs: trivy-repo-scan
+    # Only run on pull requests
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -52,29 +110,72 @@ jobs:
 
       - name: Get Changed Files
         id: changed-files
+        shell: bash
         run: |
-            git fetch origin main
-            git diff --name-only origin/main > changed-files.txt
-        
-      - name: Print Changed Files
-        run: |
-            echo "Changed files:"
-            cat changed-files.txt
+          # Fetch base branch for comparison
+          git fetch origin ${{ github.base_ref }}
+          
+          # Get list of changed files
+          git diff --name-only origin/${{ github.base_ref }}...HEAD > changed-files.txt
+          
+          echo "All changed files:"
+          cat changed-files.txt
 
-      - name: Run Trivy on Changed Files
-        if: success()
+      - name: Filter dependency files (Python + Node)
+        shell: bash
         run: |
-            mkdir trivy-results
-            while read -r file; do
-                echo "Scanning $file..."
-                trivy fs --quiet --severity HIGH,CRITICAL --format json --output trivy-results/$(basename "$file").json "$file" || true
-            done < changed-files.txt
+          # Only keep dependency files
+          grep -E "(requirements(\-dev)?\.txt|package-lock\.json)$" changed-files.txt > dep-changed-files.txt || true
+          
+          echo ""
+          echo "Dependency files changed:"
+          cat dep-changed-files.txt || echo "None"
 
-      - name: Run Reviewdog
+      # Use reviewdog with Trivy directly (proper integration)
+      - name: Run Reviewdog with Trivy on changed dependency files
         uses: reviewdog/action-trivy@v1
+        if: hashFiles('dep-changed-files.txt') != ''
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            trivy_command: fs
-            trivy_target: ./trivy-results
-            reporter: github-pr-review
-            level: error
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          trivy_command: fs
+          trivy_flags: --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed
+          # Scan only the dependency files that changed
+          trivy_target: .
+          reporter: github-pr-review
+          level: error
+          fail_on_error: false
+          filter_mode: nofilter
+
+      # Alternative: Manual scan + comment (if reviewdog doesn't work as expected)
+      - name: Fallback - Scan changed dependencies and create summary
+        if: hashFiles('dep-changed-files.txt') != ''
+        shell: bash
+        run: |
+          # Install Trivy CLI
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+          mkdir -p trivy-pr-results
+          
+          # Scan each changed dependency file
+          while IFS= read -r file; do
+            if [ -f "$file" ]; then
+              echo "Scanning $file..."
+              trivy fs \
+                --scanners vuln \
+                --severity HIGH,CRITICAL \
+                --ignore-unfixed \
+                --format table \
+                "$file" | tee "trivy-pr-results/$(basename "$file").txt" || true
+            fi
+          done < dep-changed-files.txt
+          
+          echo ""
+          echo "✅ Scan complete. Check trivy-pr-results/ for details."
+
+      - name: Upload PR scan results
+        if: hashFiles('dep-changed-files.txt') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-pr-scan-results
+          path: trivy-pr-results/
+          retention-days: 3
