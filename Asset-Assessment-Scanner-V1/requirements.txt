@@ -1,6 +1,6 @@
 defusedxml==0.7.1
 Faker==37.1.0
-fonttools==4.57.0
+fonttools==4.60.2
 fpdf2==2.8.3
 lxml==5.4.0
 numpy==2.0.2
