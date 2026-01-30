@@ -1,0 +1,199 @@
+services:
+  #################################################################
+  # LocalAI – add proxy, API key, GPU hint, healthcheck, no ports #
+  #################################################################
+  localai:
+    image: localai/localai:master-gpu-nvidia-cuda-12
+    environment:
+      # Keep core behaviour
+      - LOCALAI_SINGLE_ACTIVE_BACKEND=true
+      - DEBUG=true
+      
+      # Local site config
+      #- LOCALAI_API_KEY=${LOCALAI_API_KEY}
+
+      # <<< NEW: allow UI/GET endpoints without API key, but still require it for API calls
+      #- LOCALAI_DISABLE_API_KEY_REQUIREMENT_FOR_HTTP_GET=true
+
+      # Outbound proxy for model/gallery downloads
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+
+      # Don't proxy internal Docker traffic
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+
+    # Non-swarm GPU hint (deploy.resources from nvidia file still stays)
+    gpus: all
+
+    # Ensure this service is *only* on the internal network
+    ports: []
+    expose:
+      - "8080"
+    networks:
+      - internal
+
+    # Make sure Deakin proxy host resolves inside the container
+    extra_hosts:
+      - "proxy1.it.deakin.edu.au:10.137.0.162"
+
+    healthcheck:
+      test: [
+            "CMD-SHELL",
+            "curl -fsS -H \"Authorization: Bearer $LOCALAI_API_KEY\" http://localhost:8080/v1/models > /dev/null || exit 1"
+            ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+
+  #######################################
+  # dind – add proxy, internal-only     #
+  #######################################
+  dind:
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+    ports: []
+    networks:
+      - internal
+
+
+  ##########################################################
+  # LocalRecall – RAG settings + proxy + internal-only     #
+  ##########################################################
+  localrecall:
+    environment:
+      - COLLECTION_DB_PATH=/db
+      - EMBEDDING_MODEL=granite-embedding-107m-multilingual
+      - FILE_ASSETS=/assets
+      - LOCALRECALL_CHUNK_SIZE=256
+      - LOCALRECALL_CHUNK_OVERLAP=20
+
+      # Tell LocalRecall to talk to LocalAI using its API key
+      - OPENAI_API_KEY=${LOCALAI_API_KEY}
+      - OPENAI_BASE_URL=http://localai:8080
+
+      # Proxy behaviour
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+
+    ports: []
+    expose:
+      - "8080"
+    networks:
+      - internal
+
+    extra_hosts:
+      - "proxy1.it.deakin.edu.au:10.137.0.162"
+
+
+  ##########################################################
+  # LocalRecall healthcheck – internal-only, no proxy out  #
+  ##########################################################
+  localrecall-healthcheck:
+    environment:
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+    ports: []
+    networks:
+      - internal
+
+
+  #######################################################
+  # LocalAGI – build with proxy, connect to LocalAI/RAG #
+  #######################################################
+  localagi:
+    # Override build to inject proxy at build time
+    build:
+      context: .
+      dockerfile: Dockerfile.webui
+      # Build-time proxy (bun/go) is fine
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        NO_PROXY: ${NO_PROXY}
+
+    environment:
+      # Tell LocalAGI where LocalAI is (OpenAI-compatible API)
+      - LOCALAGI_LLM_API_URL=http://localai:8080
+      - LOCALAGI_LLM_API_KEY=${LOCALAI_API_KEY}
+
+      # Tell LocalAGI where LocalRecall is (NOTE: /api is IMPORTANT)
+      - LOCALAGI_LOCALRAG_URL=http://localrecall:8080/api
+
+      # Runtime: don't force HTTP(S)_PROXY, just no-proxy for internal services
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+
+    ports: []
+    expose:
+      - "3000"
+    networks:
+      - internal
+
+
+  ######################################
+  # Nginx – public entrypoint/proxy    #
+  ######################################
+  nginx:
+    image: nginx:latest
+    container_name: localagi-proxy
+    restart: unless-stopped
+    depends_on:
+      - localagi
+      - localai
+      - localrecall
+
+    # ONLY public-facing ports
+    ports:
+      - "9081:9081"   # HTTP – now exposed on host port 9081 instead of 80
+      - "9443:9443"  # TLS – now exposed on host port 9443 instead of 443
+      - "9000:9000" # LocalAGI Web UI (if you want a dedicated port)
+      - "9080:9080" # LocalRecall (if you want a dedicated port)
+    environment:
+     # Let nginx see your API key for external /v1 protection
+      - LOCALAI_API_KEY=${LOCALAI_API_KEY}
+    volumes:
+      #- ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
+      # - ./certs:/etc/letsencrypt:ro  # optional if using HTTPS
+
+    networks:
+      - internal
+      - public
+
+
+##############################################################
+  # SSHBOX – Ubuntu container with SSH + tools (needs proxy)   #
+  ##############################################################
+  sshbox:
+    build:
+      context: .
+      dockerfile: Dockerfile.sshbox
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        NO_PROXY: ${NO_PROXY}
+
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - NO_PROXY=localhost,127.0.0.1,::1,localai,localagi,localrecall,localrecall-healthcheck,nginx
+
+    networks:
+      - internal
+
+    # Optional: expose SSH if you want external access
+    # ports:
+    #   - "2222:22"
+
+#####################
+# Network overrides #
+#####################
+networks:
+  internal:
+    driver: bridge
+  public:
+    driver: bridge

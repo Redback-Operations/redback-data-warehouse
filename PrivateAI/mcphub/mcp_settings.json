@@ -64,7 +64,7 @@
       "type": "streamable-http",
       "url": "https://mcprouter.to/playwright",
       "headers": {
-        "Authorization": "Bearer sk-SOMESECRET",
+        "Authorization": "Bearer sk-pXifB638NUdO07Y1QXqKjuLuQJ7eDVb30fjuJXH14k8aC",
         "HTTP-Referer": "https://www.mcphubx.com",
         "X-Title": "MCPHub"
       },
@@ -76,7 +76,7 @@
       "type": "streamable-http",
       "url": "https://mcprouter.to/fetch",
       "headers": {
-        "Authorization": "Bearer sk-SOMESECRET",
+        "Authorization": "Bearer sk-pXifB638NUdO07Y1QXqKjuLuQJ7eDVb30fjuJXH14k8aC",
         "HTTP-Referer": "https://www.mcphubx.com",
         "X-Title": "MCPHub"
       },
@@ -88,7 +88,7 @@
       "type": "streamable-http",
       "url": "https://mcprouter.to/time",
       "headers": {
-        "Authorization": "Bearer sk-SOMESECRET",
+        "Authorization": "Bearer sk-pXifB638NUdO07Y1QXqKjuLuQJ7eDVb30fjuJXH14k8aC",
         "HTTP-Referer": "https://www.mcphubx.com",
         "X-Title": "MCPHub"
       },
@@ -142,7 +142,7 @@
       }
     },
     "mcpRouter": {
-      "apiKey": "sk-SOMESECRET",
+      "apiKey": "sk-pXifB638NUdO07Y1QXqKjuLuQJ7eDVb30fjuJXH14k8aC",
       "referer": "https://www.mcphubx.com",
       "title": "MCPHub",
       "baseUrl": "https://api.mcprouter.to/v1"

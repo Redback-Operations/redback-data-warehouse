@@ -608,7 +608,7 @@ openssl rand -hex 32
 ```
 
 
-sk-SOMESECRET
+sk-a07de3d7880e0b602068b3eb58fb784b808b724278aa775bac66953c11b3c4ff
 
 
 
