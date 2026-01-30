@@ -1,0 +1,226 @@
+{
+  "mcpServers": {
+    "amap": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@amap/amap-maps-mcp-server"
+      ],
+      "env": {
+        "AMAP_MAPS_API_KEY": "your-api-key"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--headless"
+      ]
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "slack": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-slack"
+      ],
+      "env": {
+        "SLACK_BOT_TOKEN": "your-bot-token",
+        "SLACK_TEAM_ID": "your-team-id"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {}
+    },
+    "time": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ]
+    },
+    "mindmap": {
+      "command": "uvx",
+      "args": [
+        "mindmap-mcp-server",
+        "--return-type",
+        "html"
+      ],
+      "env": {}
+    },
+    "playwright-mcp": {
+      "enabled": true,
+      "owner": "admin",
+      "type": "streamable-http",
+      "url": "https://mcprouter.to/playwright",
+      "headers": {
+        "Authorization": "Bearer sk-SOMESECRET",
+        "HTTP-Referer": "https://www.mcphubx.com",
+        "X-Title": "MCPHub"
+      },
+      "enableKeepAlive": false
+    },
+    "fetch-mcp": {
+      "enabled": true,
+      "owner": "admin",
+      "type": "streamable-http",
+      "url": "https://mcprouter.to/fetch",
+      "headers": {
+        "Authorization": "Bearer sk-SOMESECRET",
+        "HTTP-Referer": "https://www.mcphubx.com",
+        "X-Title": "MCPHub"
+      },
+      "enableKeepAlive": false
+    },
+    "time-mcp": {
+      "enabled": true,
+      "owner": "admin",
+      "type": "streamable-http",
+      "url": "https://mcprouter.to/time",
+      "headers": {
+        "Authorization": "Bearer sk-SOMESECRET",
+        "HTTP-Referer": "https://www.mcphubx.com",
+        "X-Title": "MCPHub"
+      },
+      "enableKeepAlive": false
+    }
+  },
+  "users": [
+    {
+      "username": "admin",
+      "password": "$2b$10$7hXN7MdB0r9wi1KKHEV1JuKOrJWN1nzf21FKWRSsVB82FVR/WYASm",
+      "isAdmin": true
+    }
+  ],
+  "systemConfig": {
+    "routing": {
+      "enableGlobalRoute": true,
+      "enableGroupNameRoute": true,
+      "enableBearerAuth": true,
+      "bearerAuthKey": "EKEGFKWAAiJsFqiCfEfi6BXNMv3MioWv"
+    },
+    "install": {
+      "pythonIndexUrl": "",
+      "npmRegistry": "",
+      "baseUrl": "http://10.137.17.254:3003/"
+    },
+    "smartRouting": {
+      "enabled": false,
+      "dbUrl": "",
+      "openaiApiBaseUrl": "",
+      "openaiApiKey": "",
+      "openaiApiEmbeddingModel": ""
+    },
+    "oauthServer": {
+      "enabled": true,
+      "accessTokenLifetime": 3600,
+      "refreshTokenLifetime": 1209600,
+      "authorizationCodeLifetime": 300,
+      "requireClientSecret": false,
+      "allowedScopes": [
+        "read",
+        "write"
+      ],
+      "requireState": false,
+      "dynamicRegistration": {
+        "enabled": true,
+        "allowedGrantTypes": [
+          "authorization_code",
+          "refresh_token"
+        ],
+        "requiresAuthentication": false
+      }
+    },
+    "mcpRouter": {
+      "apiKey": "sk-SOMESECRET",
+      "referer": "https://www.mcphubx.com",
+      "title": "MCPHub",
+      "baseUrl": "https://api.mcprouter.to/v1"
+    }
+  },
+  "providers": [
+    {
+      "id": "localai-1",
+      "name": "LocalAI (LLaMA3)",
+      "base_url": "http://192.168.8.96:8080/v1",
+      "models": [
+        "phi-4",
+        "mistral-10b",
+        "gemma-7b-it"
+      ],
+      "type": "openai",
+      "tags": [
+        "localai",
+        "gpu",
+        "q4_K"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "4dd61db1-20df-4219-b3c6-174c5319e6c9",
+      "owner": "admin",
+      "name": "User",
+      "description": "",
+      "servers": [
+        {
+          "name": "amap",
+          "tools": "all"
+        },
+        {
+          "name": "playwright",
+          "tools": "all"
+        },
+        {
+          "name": "fetch",
+          "tools": "all"
+        },
+        {
+          "name": "sequential-thinking",
+          "tools": "all"
+        },
+        {
+          "name": "time",
+          "tools": "all"
+        },
+        {
+          "name": "mindmap",
+          "tools": "all"
+        },
+        {
+          "name": "playwright-mcp",
+          "tools": "all"
+        },
+        {
+          "name": "fetch-mcp",
+          "tools": "all"
+        },
+        {
+          "name": "time-mcp",
+          "tools": "all"
+        }
+      ]
+    }
+  ],
+  "bearerKeys": [
+    {
+      "id": "685fe4e3-6442-4a04-96cf-267058928161",
+      "name": "default",
+      "token": "EKEGFKWAAiJsFqiCfEfi6BXNMv3MioWv",
+      "enabled": true,
+      "accessType": "all",
+      "allowedGroups": [],
+      "allowedServers": []
+    }
+  ]
+}
